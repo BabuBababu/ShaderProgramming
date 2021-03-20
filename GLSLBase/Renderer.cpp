@@ -54,15 +54,19 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 	//Initialize model transform matrix :; used for rotating quad normal to parallel to camera direction
 	m_m4Model = glm::rotate(glm::mat4(1.0f), glm::radians(0.f), glm::vec3(1.f, 0.f, 0.f));
 
-	//Create test data
+	//Create test data VBO
 	float tempVertices[] = { 0.f,0.f,0.f,1.f,0.f,0.f,1.f,1.f,0.f };
-	
-	
 	glGenBuffers(4, &m_VBO); //1개 생성
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO); // Array버퍼의 Bind되어있는 VBO. 여기까지 ID만 생성한 단계
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW); // VBO ID에 해당하는 것들이 GPU메모리에 할당됨
 	
-	
+	//Create test data VBO1
+	float tempVertices1[] = { 0.f,0.f,0.f,-1.f,0.f,0.f,-1.f,1.f,0.f };
+	glGenBuffers(1, &m_VBO1); //1개 생성
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1); // Array버퍼의 Bind되어있는 VBO. 여기까지 ID만 생성한 단계
+	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices1), tempVertices1, GL_STATIC_DRAW); // VBO ID에 해당하는 것들이 GPU메모리에 할당됨
+
+
 }
 
 void Renderer::CreateVertexBufferObjects()
@@ -308,16 +312,28 @@ void Renderer::Test()
 {
 	glUseProgram(m_SolidRectShader);
 
-	int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
-	glEnableVertexAttribArray(attribPosition);
-
-	//glBindBuffer(GL_ARRAY_BUFFER, m_VBORect);
+	GLint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	//int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
+	glEnableVertexAttribArray(VBOLocation);// vs에서 정의한 location 0을 의미 0은 VBOLocation로 대체 가능
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
-	glVertexAttribPointer(attribPosition, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
 
-	glDrawArrays(GL_TRIANGLES, 0, 6);// start rendering
+	GLint VBOLocation1= glGetAttribLocation(m_SolidRectShader, "a_Position1");
+	glEnableVertexAttribArray(VBOLocation1);// vs에서 정의한 location 1을 의미
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glVertexAttribPointer(VBOLocation1, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
+
+
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);// start rendering, primitive
 	
+	glEnableVertexAttribArray(VBOLocation);
+	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
+	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
+
+	glDrawArrays(GL_TRIANGLES, 0, 3);// start rendering, primitive
 
 
-	glDisableVertexAttribArray(attribPosition);
+	glDisableVertexAttribArray(VBOLocation);
+	glDisableVertexAttribArray(VBOLocation1);
 }

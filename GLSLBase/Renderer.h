@@ -51,5 +51,6 @@ private:
 	GLuint m_VBORect = 0;
 	GLuint m_SolidRectShader = 0;
 	GLuint m_VBO =0;
+	GLuint m_VBO1 = 0;
 };
 
