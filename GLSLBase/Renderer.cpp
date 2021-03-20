@@ -313,25 +313,20 @@ void Renderer::Test()
 	glUseProgram(m_SolidRectShader);
 
 	GLint VBOLocation = glGetAttribLocation(m_SolidRectShader, "a_Position");
-	//int attribPosition = glGetAttribLocation(m_SolidRectShader, "a_Position");
 	glEnableVertexAttribArray(VBOLocation);// vs에서 정의한 location 0을 의미 0은 VBOLocation로 대체 가능
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
 
 	GLint VBOLocation1= glGetAttribLocation(m_SolidRectShader, "a_Position1");
-	glEnableVertexAttribArray(VBOLocation1);// vs에서 정의한 location 1을 의미
+	glEnableVertexAttribArray(VBOLocation1);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
-	glVertexAttribPointer(VBOLocation1, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
+	glVertexAttribPointer(VBOLocation1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-
+	GLint ScaleUniform = glGetUniformLocation(m_SolidRectShader, "u_Scale");
+	glUniform1f(ScaleUniform, 0.5f);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);// start rendering, primitive
 	
-	glEnableVertexAttribArray(VBOLocation);
-	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
-	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
-
-	glDrawArrays(GL_TRIANGLES, 0, 3);// start rendering, primitive
 
 
 	glDisableVertexAttribArray(VBOLocation);
