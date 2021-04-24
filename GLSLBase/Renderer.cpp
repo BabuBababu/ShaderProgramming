@@ -56,7 +56,7 @@ void Renderer::Initialize(int windowSizeX, int windowSizeY)
 
 	//Create test data VBO
 	float tempVertices[] = { 0.f,0.f,0.f,1.f,0.f,0.f,1.f,1.f,0.f };
-	glGenBuffers(4, &m_VBO); //1개 생성
+	glGenBuffers(1, &m_VBO); //1개 생성
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO); // Array버퍼의 Bind되어있는 VBO. 여기까지 ID만 생성한 단계
 	glBufferData(GL_ARRAY_BUFFER, sizeof(tempVertices), tempVertices, GL_STATIC_DRAW); // VBO ID에 해당하는 것들이 GPU메모리에 할당됨
 	
@@ -317,22 +317,23 @@ void Renderer::Test()
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
 	glVertexAttribPointer(VBOLocation, 3, GL_FLOAT, GL_FALSE, 0, 0);//Draw시 데이터를 읽어갈 단위크기 및 시작점 설정
 
+
 	GLint VBOLocation1= glGetAttribLocation(m_SolidRectShader, "a_Position1");
 	glEnableVertexAttribArray(VBOLocation1);
 	glBindBuffer(GL_ARRAY_BUFFER, m_VBO1);
 	glVertexAttribPointer(VBOLocation1, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
 	static float gscale = 0.f;
-	
 	GLint ScaleUniform = glGetUniformLocation(m_SolidRectShader, "u_Scale");
 	glUniform1f(ScaleUniform, gscale);
+	GLint ColorUniform = glGetUniformLocation(m_SolidRectShader, "u_Color");
+	glUniform4f(ColorUniform, 1, 1, 1, 1);
 
 	glDrawArrays(GL_TRIANGLES, 0, 3);// start rendering, primitive
-	
+
 	gscale += 0.01f;
 	if (gscale > 1.f)
 		gscale = 0.f;
-
 
 	glDisableVertexAttribArray(VBOLocation);
 	glDisableVertexAttribArray(VBOLocation1);
