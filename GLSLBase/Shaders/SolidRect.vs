@@ -1,18 +1,16 @@
 #version 450
-//입력은 여러개를 받을 수 있다.
 
-//in vec3 a_Position; // 사용자가 정의한 입력 값
-in vec3 a_Position;   // float 3개 로케이션 0번지에 들어오는 입력을 vec3로 해석해서  a_position이라는 변수에 집어 넣는다.
-//in vec3 a_Position1;  // float 3개 ,총 6개 floats
+in vec3 a_Position;   // float position 3개
+in vec3 a_Velocity; // float velocity 3개
 
 //외부입력
-//uniform float u_Scale; 
-//uniform vec3 u_Position;
+uniform float u_Time;//누적시간
 
 void main()
 {
-	//vec3 temp = a_Position;
-	//temp = temp + u_Position;
-	gl_Position = vec4(a_Position, 1);//OpenGL의 고유 출력 값
+	vec3 newPos = a_Position;
+	newPos = newPos + u_Time*a_Velocity;
+
+	gl_Position = vec4(newPos, 1);//OpenGL의 고유 출력 값
 
 }
