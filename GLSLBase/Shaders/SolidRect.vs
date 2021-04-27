@@ -4,6 +4,8 @@ in vec3 a_Position;   // float position 3개
 in vec3 a_Velocity; // float velocity 3개
 in float a_EmitTime; // float emittime 1개
 in float a_LifeTime; // float lifetime 1개
+in float a_Period; // float period 1개
+in float a_Amp; // float amp 1개
 
 //외부입력
 uniform float u_Time;//누적시간
@@ -24,7 +26,7 @@ void main()
 	
 		newTime = mod(newTime,a_LifeTime);
 		newPos = newPos + vec3(newTime,0,0); //x는 newTime에 따라서 계속 움직이게끔
-		newPos.y = newPos.y + sin(newTime*3.14*2);
+		newPos.y = newPos.y + (a_Amp*newTime) * sin(newTime * 3.14 * 2 * a_Period);
 		//float t = newTime;
 		//float tt = newTime*newTime;
 		//newPos = newPos + u_Time*a_Velocity + 0.5 * c_Gravity * tt;
