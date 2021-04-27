@@ -11,7 +11,8 @@ in float a_Amp; // float amp 1개
 uniform float u_Time;//누적시간
 
 const vec3 c_Gravity = vec3(0,0,0);
-
+const mat3 c_NV = mat3(0,-1,0,1,0,0,0,0,0);//-90도 회전행렬
+		
 void main()
 {
 	float newTime = u_Time - a_EmitTime;
@@ -24,12 +25,16 @@ void main()
 	else
 	{
 	
-		newTime = mod(newTime,a_LifeTime);
-		newPos = newPos + vec3(newTime,0,0); //x는 newTime에 따라서 계속 움직이게끔
-		newPos.y = newPos.y + (a_Amp*newTime) * sin(newTime * 3.14 * 2 * a_Period);
-		//float t = newTime;
-		//float tt = newTime*newTime;
-		//newPos = newPos + u_Time*a_Velocity + 0.5 * c_Gravity * tt;
+		//newTime = mod(newTime,a_LifeTime);
+		//newPos = newPos + vec3(newTime,0,0); //x는 newTime에 따라서 계속 움직이게끔
+		//newPos.y = newPos.y + (a_Amp*newTime) * sin(newTime * 3.14 * 2 * a_Period);
+		
+		float t = newTime;
+		float tt = newTime*newTime;
+		vec3 currVel = a_Velocity + t * c_Gravity;
+		vec3 normalv = normalize(currVel * c_NV); //속도 벡터에 수직방향을 곱함
+		newPos = newPos + u_Time*a_Velocity + 0.5 * c_Gravity * tt;
+		newPos = newPos + normalv * a_Amp * sin(3.14 * 2 * a_Period * newTime);
 
 	}
 	
