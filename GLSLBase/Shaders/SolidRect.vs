@@ -8,7 +8,7 @@ in float a_LifeTime; // float lifetime 1개
 //외부입력
 uniform float u_Time;//누적시간
 
-const vec3 c_Gravity = vec3(0,-.001 ,0);
+const vec3 c_Gravity = vec3(0,0,0);
 
 void main()
 {
@@ -23,9 +23,11 @@ void main()
 	{
 	
 		newTime = mod(newTime,a_LifeTime);
-		float t = newTime;
-		float tt = newTime*newTime;
-		newPos = newPos + u_Time*a_Velocity + 0.5 * c_Gravity * tt;
+		newPos = newPos + vec3(newTime,0,0); //x는 newTime에 따라서 계속 움직이게끔
+		newPos.y = newPos.y + sin(newTime*3.14*2);
+		//float t = newTime;
+		//float tt = newTime*newTime;
+		//newPos = newPos + u_Time*a_Velocity + 0.5 * c_Gravity * tt;
 
 	}
 	
